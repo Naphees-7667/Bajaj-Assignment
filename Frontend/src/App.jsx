@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import "./App.css";
+// import "./App.css";
 
-const API_URL = "http://localhost:3000/bfhl";
+const API_URL = "https://bajajjjj-l0nm.onrender.com/bfhl";
 
 const options = [
   { value: "alphabets", label: "Alphabets" },

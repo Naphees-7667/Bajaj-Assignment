@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Select from "react-select";
-// import "./App.css";
 
 const API_URL = "https://backendddd-o2uz.onrender.com/bfhl";
 
@@ -18,20 +17,29 @@ const App = () => {
 
   const handleSubmit = async () => {
     setError("");
+    setResponse(null);
+
     try {
       const parsedData = JSON.parse(jsonInput);
+      
       if (!parsedData.data || !Array.isArray(parsedData.data)) {
-        throw new Error("Invalid JSON structure");
+        throw new Error("Invalid JSON structure. Expected { \"data\": [values] }");
       }
+
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsedData),
       });
+
+      if (!res.ok) {
+        throw new Error(`API error: ${res.statusText}`);
+      }
+
       const result = await res.json();
       setResponse(result);
     } catch (err) {
-      setError("Invalid JSON format or API error");
+      setError(err.message || "Invalid JSON format or API error");
     }
   };
 
@@ -55,13 +63,16 @@ const App = () => {
         onChange={(e) => setJsonInput(e.target.value)}
       />
       <button onClick={handleSubmit}>Submit</button>
+      
       {error && <p className="error">{error}</p>}
+
       {response && (
         <>
           <Select
             options={options}
             isMulti
-            onChange={setSelectedFilters}
+            value={selectedFilters}
+            onChange={(selected) => setSelectedFilters(selected || [])}
             placeholder="Select filters"
           />
           <div className="response-output">

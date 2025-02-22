@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
+import "./index.css";
 
 const API_URL = "https://backendddd-o2uz.onrender.com/bfhl";
 
@@ -21,9 +22,9 @@ const App = () => {
 
     try {
       const parsedData = JSON.parse(jsonInput);
-      
+
       if (!parsedData.data || !Array.isArray(parsedData.data)) {
-        throw new Error("Invalid JSON structure. Expected { \"data\": [values] }");
+        throw new Error('Invalid JSON structure. Expected { "data": [values] }');
       }
 
       const res = await fetch(API_URL, {
@@ -58,17 +59,21 @@ const App = () => {
     <div className="app-container">
       <h1>BFHL API Frontend</h1>
       <textarea
+        className="json-input"
         placeholder='Enter JSON (e.g. { "data": ["A", "1", "B"] })'
         value={jsonInput}
         onChange={(e) => setJsonInput(e.target.value)}
       />
-      <button onClick={handleSubmit}>Submit</button>
-      
+      <button className="submit-btn" onClick={handleSubmit}>
+        Submit
+      </button>
+
       {error && <p className="error">{error}</p>}
 
       {response && (
         <>
           <Select
+            className="select-dropdown"
             options={options}
             isMulti
             value={selectedFilters}
@@ -84,5 +89,6 @@ const App = () => {
     </div>
   );
 };
+
 
 export default App;
